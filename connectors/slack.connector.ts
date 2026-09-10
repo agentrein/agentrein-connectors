@@ -73,29 +73,29 @@ function getResponseIds(action: SlackAction): { channel?: string; ts?: string } 
     };
 }
 
-function getCreatedChannelResponse(action: SlackAction): { channel: string } {
+function getCreatedChannelResponse(action: SlackAction, orgId: string): { channel: string } {
     const channelRes = action.response?.data?.channel ?? action.response?.channel;
     const channelId = typeof channelRes === 'string' ? channelRes : (isRecord(channelRes) && typeof channelRes.id === 'string' ? channelRes.id : undefined);
     if (!channelId) {
-        throw new Error(getRollbackErrorMessage(action, 'unknown', 'Missing channel ID in response'));
+        throw new Error(getRollbackErrorMessage(action, orgId, 'Missing channel ID in response'));
     }
     return { channel: channelId };
 }
 
-function getCreatedFileResponse(action: SlackAction): { file: string } {
+function getCreatedFileResponse(action: SlackAction, orgId: string): { file: string } {
     const fileRes = action.response?.data?.file ?? action.response?.file;
     const fileId = typeof fileRes === 'string' ? fileRes : (isRecord(fileRes) && typeof fileRes.id === 'string' ? fileRes.id : undefined);
     if (!fileId) {
-        throw new Error(getRollbackErrorMessage(action, 'unknown', 'Missing file ID in response'));
+        throw new Error(getRollbackErrorMessage(action, orgId, 'Missing file ID in response'));
     }
     return { file: fileId };
 }
 
-function getCreatedUserGroupResponse(action: SlackAction): { usergroup: string } {
+function getCreatedUserGroupResponse(action: SlackAction, orgId: string): { usergroup: string } {
     const ugRes = action.response?.data?.usergroup ?? action.response?.usergroup;
     const usergroupId = typeof ugRes === 'string' ? ugRes : (isRecord(ugRes) && typeof ugRes.id === 'string' ? ugRes.id : undefined);
     if (!usergroupId) {
-        throw new Error(getRollbackErrorMessage(action, 'unknown', 'Missing usergroup ID in response'));
+        throw new Error(getRollbackErrorMessage(action, orgId, 'Missing usergroup ID in response'));
     }
     return { usergroup: usergroupId };
 }
@@ -232,7 +232,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'CORRECTION_MESSAGE',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const { channel, ts } = getResponseIds(action);
                     if (!channel || !ts) {
@@ -270,7 +270,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     if (!beforeState.channel || !beforeState.ts) {
@@ -311,7 +311,7 @@ export const slackConnector: Connector = {
                 type: 'API_CALL',
                 // Best-effort text restoration only — does not restore thread replies or reactions attached to the original message. This is a deliberate product decision: partial restoration is preferable to no restoration.
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     if (!beforeState.channel) {
@@ -355,9 +355,9 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
-                    const createdChannel = getCreatedChannelResponse(action);
+                    const createdChannel = getCreatedChannelResponse(action, orgId);
                     const client = context.client as WebClient;
 
                     try {
@@ -385,9 +385,9 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
-                    const createdFile = getCreatedFileResponse(action);
+                    const createdFile = getCreatedFileResponse(action, orgId);
                     const client = context.client as WebClient;
 
                     try {
@@ -415,9 +415,9 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
-                    const createdUserGroup = getCreatedUserGroupResponse(action);
+                    const createdUserGroup = getCreatedUserGroupResponse(action, orgId);
                     const client = context.client as WebClient;
 
                     try {
@@ -448,7 +448,7 @@ export const slackConnector: Connector = {
                 type: 'API_CALL',
                 // Composite-key resource — the payload's (channel, ts, name) tuple IS the resource's natural identifier; there is no separate server-generated ID to read from the response.
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     const ts = action.payload.ts ?? action.payload.timestamp;
@@ -488,7 +488,7 @@ export const slackConnector: Connector = {
                 type: 'API_CALL',
                 // Composite-key resource — the payload's (channel, ts, name) tuple IS the resource's natural identifier; there is no separate server-generated ID to read from the response.
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     const ts = action.payload.ts ?? action.payload.timestamp;
@@ -528,7 +528,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     const channel = beforeState.channel ?? action.payload.channel;
@@ -566,7 +566,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     const channel = beforeState.channel ?? action.payload.channel;
@@ -604,7 +604,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     const channel = beforeState.channel ?? action.payload.channel;
@@ -642,7 +642,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     const profile = beforeState.profile;
@@ -680,7 +680,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     const usergroup = beforeState.usergroup ?? action.payload.usergroup;
@@ -720,7 +720,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const beforeState = getBeforeState(action, orgId);
                     const usergroup = beforeState.usergroup ?? action.payload.usergroup;
@@ -760,7 +760,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     if (!channel) {
@@ -794,7 +794,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     const usersToKick = parseUserList(action.payload.users, action.payload.user);
@@ -839,7 +839,7 @@ export const slackConnector: Connector = {
                 type: 'API_CALL',
                 // Rollback may fail on permissions or private channels — this is expected and should surface as a normal rollback failure, not be silently swallowed.
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     const user = action.payload.user ?? (typeof action.payload.users === 'string' ? action.payload.users : Array.isArray(action.payload.users) ? action.payload.users[0] : undefined);
@@ -875,7 +875,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     if (!channel) {
@@ -909,7 +909,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     if (!channel) {
@@ -943,7 +943,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     if (!channel) {
@@ -977,7 +977,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const channel = action.payload.channel;
                     if (!channel) {
@@ -1011,7 +1011,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const usergroup = action.payload.usergroup;
                     if (!usergroup) {
@@ -1045,7 +1045,7 @@ export const slackConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SlackAction;
                     const usergroup = action.payload.usergroup;
                     if (!usergroup) {

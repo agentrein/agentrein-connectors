@@ -79,7 +79,7 @@ function getIssueResponse(action: GitHubAction): NonNullable<GitHubAction['respo
     return response;
 }
 
-function getCreatedFileResponse(action: GitHubAction): { path: string; sha: string } {
+function getCreatedFileResponse(action: GitHubAction, orgId: string): { path: string; sha: string } {
     const res = (action.response?.data ?? action.response) as Record<string, unknown> | undefined;
     const contentObj = (res?.content ?? (res?.data as Record<string, unknown> | undefined)?.content) as Record<string, unknown> | undefined;
     const path = (typeof res?.path === 'string' ? res.path : undefined) ??
@@ -89,41 +89,42 @@ function getCreatedFileResponse(action: GitHubAction): { path: string; sha: stri
                 (typeof contentObj?.sha === 'string' ? contentObj.sha : undefined);
     if (!path || !sha) {
         throw new Error(
-            `[githubConnector] rollback failed | action: ${action.id} | org: unknown | op: ${action.operationType} | reason: Missing path or sha in create file response`,
+            `[githubConnector] rollback failed | action: ${action.id} | org: ${orgId} | op: ${action.operationType} | reason: Missing path or sha in create file response`,
         );
     }
     return { path, sha };
 }
 
-function getCreatedIssueCommentResponse(action: GitHubAction): { comment_id: number } {
+function getCreatedIssueCommentResponse(action: GitHubAction, orgId: string): { comment_id: number } {
     const res = (action.response?.data ?? action.response) as Record<string, unknown> | undefined;
     const commentId = typeof res?.id === 'number' ? res.id : undefined;
     if (!commentId) {
         throw new Error(
-            `[githubConnector] rollback failed | action: ${action.id} | org: unknown | op: ${action.operationType} | reason: Missing comment id in create comment response`,
+            `[githubConnector] rollback failed | action: ${action.id} | org: ${orgId} | op: ${action.operationType} | reason: Missing comment id in create comment response`,
         );
     }
     return { comment_id: commentId };
 }
 
-function getCreatedReleaseResponse(action: GitHubAction): { release_id: number } {
+function getCreatedReleaseResponse(action: GitHubAction, orgId: string): { release_id: number } {
     const res = (action.response?.data ?? action.response) as Record<string, unknown> | undefined;
     const releaseId = typeof res?.id === 'number' ? res.id : undefined;
     if (!releaseId) {
         throw new Error(
-            `[githubConnector] rollback failed | action: ${action.id} | org: unknown | op: ${action.operationType} | reason: Missing release id in create release response`,
+            `[githubConnector] rollback failed | action: ${action.id} | org: ${orgId} | op: ${action.operationType} | reason: Missing release id in create release response`,
         );
     }
     return { release_id: releaseId };
 }
 
-function getCreatedInvitationResponse(action: GitHubAction): { org: string; invitation_id: number } {
+function getCreatedInvitationResponse(action: GitHubAction, orgId: string): { org: string; invitation_id: number } {
+    // action.payload.org/owner is the GitHub-side org/owner name, unrelated to AgentRein's tenant orgId used in rollback error reporting below.
     const org = typeof action.payload.org === 'string' ? action.payload.org : (typeof action.payload.owner === 'string' ? action.payload.owner : undefined);
     const res = (action.response?.data ?? action.response) as Record<string, unknown> | undefined;
     const invitationId = typeof res?.id === 'number' ? res.id : (typeof action.payload.invitation_id === 'number' ? action.payload.invitation_id : undefined);
     if (!org || !invitationId) {
         throw new Error(
-            `[githubConnector] rollback failed | action: ${action.id} | org: unknown | op: ${action.operationType} | reason: Missing org or invitation_id for invite rollback`,
+            `[githubConnector] rollback failed | action: ${action.id} | org: ${orgId} | op: ${action.operationType} | reason: Missing org or invitation_id for invite rollback`,
         );
     }
     return { org, invitation_id: invitationId };
@@ -243,7 +244,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const issue = getIssueResponse(action);
                     const owner = action.payload.owner;
@@ -284,7 +285,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {
@@ -344,9 +345,9 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
-                    const createdFile = getCreatedFileResponse(action);
+                    const createdFile = getCreatedFileResponse(action, orgId);
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
 
@@ -385,9 +386,9 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
-                    const comment = getCreatedIssueCommentResponse(action);
+                    const comment = getCreatedIssueCommentResponse(action, orgId);
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
 
@@ -424,9 +425,9 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
-                    const release = getCreatedReleaseResponse(action);
+                    const release = getCreatedReleaseResponse(action, orgId);
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
 
@@ -465,7 +466,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState || !beforeState.content) {
@@ -526,7 +527,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState || !beforeState.content) {
@@ -574,7 +575,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState || beforeState.body === undefined) {
@@ -621,7 +622,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {
@@ -669,7 +670,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {
@@ -721,7 +722,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
@@ -760,7 +761,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
@@ -800,7 +801,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
@@ -840,7 +841,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
@@ -879,7 +880,7 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
                     const owner = action.payload.owner;
                     const repo = action.payload.repo;
@@ -976,9 +977,9 @@ export const githubConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GitHubAction;
-                    const invite = getCreatedInvitationResponse(action);
+                    const invite = getCreatedInvitationResponse(action, orgId);
 
                     const client = context.client as Octokit;
                     try {

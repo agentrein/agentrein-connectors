@@ -9,6 +9,7 @@ export type RollbackType = "API_CALL" | "CORRECTION_MESSAGE" | "NONE";
 
 export interface RollbackContext {
   client: unknown;
+  orgId?: string;
   // The client is typed as unknown here. Each connector casts it to the
   // appropriate SDK type internally.
   // e.g. const client = context.client as Octokit;

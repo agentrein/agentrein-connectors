@@ -83,7 +83,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     const page = getResponse(action, orgId) as NotionPage;
                     if (!page.id) {
@@ -115,7 +115,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {
@@ -152,7 +152,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     const page = getResponse(action, orgId) as NotionPage;
                     if (!page.id) {
@@ -183,7 +183,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     const result = getResponse(action, orgId) as NotionBlockAppendResult;
                     if (!Array.isArray(result.results) || result.results.length === 0) {
@@ -243,7 +243,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     // Toggle target — page_id is caller-specified in the payload, not server-generated; no response extraction needed.
                     const pageId = typeof action.payload?.page_id === 'string' ? action.payload.page_id : undefined;
@@ -276,7 +276,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     // Toggle target — page_id is caller-specified in the payload, not server-generated; no response extraction needed.
                     const pageId = typeof action.payload?.page_id === 'string' ? action.payload.page_id : undefined;
@@ -309,7 +309,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     // Domain alias of notion.pages.archive — same SDK call (pages.update), distinct apiName for Agent intent clarity per database-item vs standalone-page mental model.
                     // Toggle target — page_id is caller-specified in the payload, not server-generated; no response extraction needed.
@@ -343,7 +343,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     // Domain alias of notion.pages.restore — same SDK call (pages.update), distinct apiName for Agent intent clarity per database-item vs standalone-page mental model.
                     // Toggle target — page_id is caller-specified in the payload, not server-generated; no response extraction needed.
@@ -377,7 +377,7 @@ export const notionConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as NotionAction;
                     // Domain alias of notion.pages.update — identical snapshot-restore logic, distinct apiName for database-item semantics.
                     const beforeState = action.snapshot?.beforeState ?? null;

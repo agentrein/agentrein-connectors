@@ -182,7 +182,7 @@ export const gsheetsConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GSheetsAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {
@@ -215,7 +215,7 @@ export const gsheetsConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GSheetsAction;
                     const spreadsheet = getResponse(action, orgId) as SheetsSpreadsheet;
                     if (!spreadsheet.spreadsheetId) {
@@ -253,7 +253,7 @@ export const gsheetsConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GSheetsAction;
                     const response = getResponse(action, orgId);
                     const sheetId = response.replies?.[0]?.addSheet?.properties?.sheetId;

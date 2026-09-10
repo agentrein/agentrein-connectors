@@ -79,7 +79,7 @@ const stripeActions = [
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     const res = getResponseRecord(action);
                     const client = context.client as Stripe;
@@ -119,7 +119,7 @@ const stripeActions = [
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     const res = getResponseRecord(action);
                     const client = context.client as Stripe;
@@ -179,8 +179,8 @@ const stripeActions = [
             safetyLevel: 'HIGH',
             rollback: {
                 type: 'NONE',
-                execute: async (rawAction: unknown): Promise<void> => {
-                    const orgId = 'unknown';
+                execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     throw getRollbackError(
                         action,
@@ -199,7 +199,7 @@ const stripeActions = [
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     const res = getResponseRecord(action);
                     const client = context.client as Stripe;
@@ -227,8 +227,8 @@ const stripeActions = [
             safetyLevel: 'HIGH',
             rollback: {
                 type: 'NONE',
-                execute: async (rawAction: unknown): Promise<void> => {
-                    const orgId = 'unknown';
+                execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     throw getRollbackError(
                         action,
@@ -249,7 +249,7 @@ const stripeActions = [
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     const res = getResponseRecord(action);
                     const client = context.client as Stripe;
@@ -297,7 +297,7 @@ const stripeActions = [
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     const client = context.client as Stripe;
                     const paymentMethodId =
@@ -342,8 +342,8 @@ const stripeActions = [
             safetyLevel: 'HIGH',
             rollback: {
                 type: 'NONE',
-                execute: async (rawAction: unknown): Promise<void> => {
-                    const orgId = 'unknown';
+                execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as StripeAction;
                     throw getRollbackError(
                         action,

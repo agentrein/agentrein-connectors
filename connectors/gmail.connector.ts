@@ -143,7 +143,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'CORRECTION_MESSAGE',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const msg = getResponse(action, orgId) as GmailMessage;
                     const payload = action.payload;
@@ -189,7 +189,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const msg = getResponse(action, orgId) as GmailMessage;
                     if (!msg.id) {
@@ -237,7 +237,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const draft = getResponse(action, orgId) as GmailDraft;
                     if (!draft.id) {
@@ -270,7 +270,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const beforeState = action.snapshot?.beforeState;
                     if (!beforeState?.labelIds?.length) {
@@ -314,7 +314,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const label = getResponse(action, orgId) as GmailLabel;
                     if (!label.id) {
@@ -349,7 +349,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'CORRECTION_MESSAGE',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const msg = getResponse(action, orgId) as GmailMessage;
                     const payload = action.payload;
@@ -398,7 +398,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const beforeState = action.snapshot?.beforeState;
                     if (!beforeState?.raw && !beforeState?.message) {
@@ -439,7 +439,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const beforeState = action.snapshot?.beforeState;
                     if (!beforeState?.labelIds?.length) {
@@ -483,7 +483,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const messageId = action.payload.messageId ?? action.payload.id ?? (action.response ? getResponse(action, orgId).id : undefined);
                     if (!messageId) {
@@ -531,7 +531,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const threadId = action.payload.threadId ?? action.payload.id ?? (action.response ? getResponse(action, orgId).id : undefined);
                     if (!threadId) {
@@ -564,7 +564,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const threadId = action.payload.threadId ?? action.payload.id ?? (action.response ? getResponse(action, orgId).id : undefined);
                     if (!threadId) {
@@ -597,7 +597,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const messageId = action.payload.messageId ?? action.payload.id;
                     if (!messageId) {
@@ -633,7 +633,7 @@ export const gmailConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GmailAction;
                     const messageId = action.payload.messageId ?? action.payload.id;
                     if (!messageId) {

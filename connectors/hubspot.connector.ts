@@ -94,7 +94,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const contact = getResponse(action, orgId) as HubSpotContact;
                     if (!contact.id) {
@@ -127,7 +127,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const beforeState = action.snapshot?.beforeState as HubSpotContact | null | undefined;
                     if (!beforeState) {
@@ -166,7 +166,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const deal = getResponse(action, orgId) as HubSpotDeal;
                     if (!deal.id) {
@@ -198,7 +198,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const beforeState = action.snapshot?.beforeState as HubSpotDeal | null | undefined;
                     if (!beforeState) {
@@ -238,7 +238,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const company = getResponse(action, orgId) as HubSpotCompany;
                     if (!company.id) {
@@ -271,7 +271,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const ticket = getResponse(action, orgId) as HubSpotTicket;
                     if (!ticket.id) {
@@ -304,7 +304,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const engagement = getResponse(action, orgId) as HubSpotEngagement;
                     if (!engagement.id) {
@@ -338,7 +338,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const fromObjectType = typeof action.payload.fromObjectType === 'string' ? action.payload.fromObjectType : undefined;
                     const fromObjectId = typeof action.payload.fromObjectId === 'string' ? action.payload.fromObjectId : undefined;
@@ -375,7 +375,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const beforeState = action.snapshot?.beforeState as HubSpotCompany | null | undefined;
                     if (!beforeState) {
@@ -413,7 +413,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const beforeState = action.snapshot?.beforeState as HubSpotTicket | null | undefined;
                     if (!beforeState) {
@@ -454,7 +454,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const listId = typeof action.payload.listId === 'string' ? action.payload.listId : (typeof action.payload.id === 'string' ? action.payload.id : undefined);
                     const contactId = typeof action.payload.contactId === 'string' ? action.payload.contactId : (typeof action.payload.recordId === 'string' ? action.payload.recordId : undefined);
@@ -491,7 +491,7 @@ export const hubspotConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as HubSpotAction;
                     const listId = typeof action.payload.listId === 'string' ? action.payload.listId : (typeof action.payload.id === 'string' ? action.payload.id : undefined);
                     const contactId = typeof action.payload.contactId === 'string' ? action.payload.contactId : (typeof action.payload.recordId === 'string' ? action.payload.recordId : undefined);

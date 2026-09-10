@@ -133,7 +133,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const file = getResponse(action, orgId);
                     if (!file.id) {
@@ -169,7 +169,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {
@@ -209,7 +209,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const fileId = action.payload.fileId;
                     if (!fileId) {
@@ -255,7 +255,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const file = getResponse(action, orgId);
                     if (!file.id) {
@@ -303,7 +303,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const file = getResponse(action, orgId);
                     if (!file.id) {
@@ -335,7 +335,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDrivePermissionAction;
                     const permission = getCreatedPermissionResponse(action, orgId);
                     const fileId = action.payload.fileId;
@@ -368,7 +368,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const drive = getResponse(action, orgId);
                     if (!drive.id) {
@@ -401,7 +401,7 @@ export const gdriveConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as GDriveAction;
                     const beforeState = action.snapshot?.beforeState ?? null;
                     if (!beforeState) {

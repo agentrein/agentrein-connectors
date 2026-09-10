@@ -169,7 +169,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const contact = getResponse(action, orgId) as SalesforceContact;
                     if (!contact.id) {
@@ -197,7 +197,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceContact | null | undefined;
                     if (!beforeState) {
@@ -238,7 +238,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const opportunity = getResponse(action, orgId) as SalesforceOpportunity;
                     if (!opportunity.id) {
@@ -266,7 +266,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceOpportunity | null | undefined;
                     if (!beforeState) {
@@ -304,7 +304,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const account = getResponse(action, orgId) as SalesforceAccount;
                     if (!account.id) {
@@ -332,7 +332,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceAccount | null | undefined;
                     if (!beforeState) {
@@ -407,7 +407,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const lead = getResponse(action, orgId) as SalesforceLead;
                     if (!lead.id) {
@@ -435,7 +435,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceLead | null | undefined;
                     if (!beforeState) {
@@ -510,7 +510,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const caseRecord = getResponse(action, orgId) as SalesforceCase;
                     if (!caseRecord.id) {
@@ -538,7 +538,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceCase | null | undefined;
                     if (!beforeState) {
@@ -598,7 +598,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const objectApiName = typeof action.payload?.objectApiName === 'string' ? action.payload.objectApiName : null;
                     if (!objectApiName) {
@@ -636,7 +636,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const objectApiName = typeof action.payload?.objectApiName === 'string' ? action.payload.objectApiName : null;
                     if (!objectApiName) {
@@ -701,7 +701,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const attachment = getResponse(action, orgId) as SalesforceAttachment;
                     if (!attachment.id) {
@@ -729,7 +729,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceAttachment | null | undefined;
                     if (!beforeState) {
@@ -784,7 +784,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const task = getResponse(action, orgId) as SalesforceTask;
                     if (!task.id) {
@@ -812,7 +812,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const beforeState = action.snapshot?.beforeState as SalesforceTask | null | undefined;
                     if (!beforeState) {
@@ -867,7 +867,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const doc = getResponse(action, orgId) as SalesforceDocument;
                     if (!doc.id) {
@@ -896,7 +896,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const note = getResponse(action, orgId) as SalesforceNote;
                     if (!note.id) {
@@ -924,7 +924,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const caseComment = getResponse(action, orgId) as SalesforceCaseComment;
                     if (!caseComment.id) {
@@ -953,7 +953,7 @@ export const salesforceConnector: Connector = {
             rollback: {
                 type: 'API_CALL',
                 execute: async (rawAction: unknown, context: RollbackContext): Promise<void> => {
-                    const orgId = 'unknown';
+                    const orgId = context.orgId ?? 'unknown';
                     const action = rawAction as SalesforceAction;
                     const member = getResponse(action, orgId) as SalesforceCampaignMember;
                     if (!member.id) {
