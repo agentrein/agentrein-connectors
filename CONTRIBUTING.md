@@ -122,8 +122,9 @@ PRs will not be merged without strict type verification:
 ### Proposing a New Connector
 1. Copy `examples/custom-connector.example.ts` to `connectors/<newconnector>.connector.ts`.
 2. Implement actions and type definitions using official SDKs.
-3. Export the new connector module in `connectors/index.ts`.
+3. Confirm the new connector file is included in whatever mechanism sync-connectors.yml uses to copy files into the backend (currently a directory-level cp -r, no index file required on this side).
 4. Update the **Supported Connectors** table in `README.md`.
+5. After the automated sync PR merges into the backend repo, a maintainer must complete the manual backend-registration step (see connector-expansion-framework.md, Step 4.5) — registering the connector in backend/src/core/registry/index.ts and backend/src/core/connectors.ts. The sync alone does not make a new connector usable.
 
 ---
 
